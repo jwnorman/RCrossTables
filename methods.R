@@ -80,3 +80,7 @@ totaltime <- endtime - begintime; totaltime
 avgtime <- totaltime/numPlayers; avgtime # .35532
 getMaxPlayerID()*avgtime/60/60 # 2 hours 23 minutes
 
+# convert to data.frame assuming no nested JSON
+test <- player(1:100)
+testdf <- as.data.frame(t(as.data.frame(test)))
+
