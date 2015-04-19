@@ -44,8 +44,17 @@ player <- function(playerID=NULL, naspaID=NULL, upcoming=FALSE, partial=FALSE, a
 
 	# Access API and convert to R object
 	playerList <- lapply(link, function(url) {
-		fromJSON(url)
-	})
+		out <- tryCatch(fromJSON(url),
+			error = function(cond) {
+				return("Connection Error. Retry.")
+			},
+			warning = function(cond) {
+				return("Connection Error. Retry.")
+			},
+			finally = {
+				
+			})
+		})
 
 	# Output
 	if (length(playerList) <= 10) {
@@ -72,12 +81,13 @@ getMaxTourneyID <- function() {
 }
 
 # portioned calls; time estimates
-numPlayers <- 100
+numPlayers <- getMaxPlayerID()
 begintime <- Sys.time()
 temp <- player(1:numPlayers)
 endtime <- Sys.time()
 totaltime <- endtime - begintime; totaltime
 avgtime <- totaltime/numPlayers; avgtime # .35532
+save(temp, file="~/Documents/Scrabble/Studies/RCrossTables/playerlist2.Rda")
 getMaxPlayerID()*avgtime/60/60 # 2 hours 23 minutes
 
 # convert to data.frame assuming no nested JSON
